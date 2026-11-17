@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminator1 Hub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --bg: #0a0a0c;
+            --card-bg: #141418;
+            --card-border: #24242c;
+            --primary: #5865f2;
+            --primary-hover: #4752c4;
+            --text-main: #ffffff;
+            --text-muted: #8b8b93;
+            --success: #4CAF50;
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(88, 101, 242, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(88, 101, 242, 0.08) 0%, transparent 40%);
+            overflow-x: hidden;
+        }
+
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        .script-code {
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #2a2a35; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3a3a45; }
+
+        a { text-decoration: none; color: inherit; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+            text-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
+        }
+
+        nav {
+            display: flex;
+            gap: 32px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            transition: color 0.2s;
+            position: relative;
+            padding-bottom: 4px;
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--text-main);
+        }
+        
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), #8b5cf6);
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(88, 101, 242, 0.6);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .discord-btn {
+            background: linear-gradient(135deg, #5865f2, #4752c4);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+            transition: none;
+        }
+
+        .discord-btn:hover {
+            transform: none;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .category-section {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .category-section.active {
+            display: flex;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            text-align: center;
+            letter-spacing: -0.04em;
+            margin-bottom: 16px;
+            line-height: 1.1;
+            background: linear-gradient(180deg, #ffffff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            text-align: center;
+            margin-bottom: 40px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .support-text {
+            margin-top: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        .support-text a {
+            color: var(--primary);
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        
+        .support-text a:hover {
+            color: #8b5cf6;
+            text-decoration: underline;
+        }
+
+        .script-area {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .action-btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .action-btn:hover {
+            transform: none;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .script-box {
+            display: none;
+            width: 100%;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .script-box.visible {
+            display: flex;
+        }
+
+        .script-code {
+            flex: 1;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: #d4d4d8;
+            line-height: 1.5;
+            word-break: break-all;
+            padding: 8px;
+            background: #0a0a0c;
+            border-radius: 8px;
+        }
+
+        .copy-btn {
+            background-color: var(--success);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: default;
+            margin-left: 12px;
+            align-self: center;
+            white-space: nowrap;
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 50px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, rgba(20, 20, 24, 0.8), rgba(30, 30, 40, 0.6));
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-box-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .stat-box-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            margin-bottom: 40px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .title-area {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .games-count-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .games-count-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-main);
+        }
+
+        .games-count {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .search-input {
+            width: 100%;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: #fff;
+            padding: 14px 16px 14px 46px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            outline: none;
+            transition: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 20px;
+            height: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            width: 100%;
+        }
+
+        .card-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            background-color: #1e1e24;
+            cursor: zoom-in;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .game-title {
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: -0.3px;
+            color: var(--text-main);
+        }
+
+        .game-playing {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .status-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--success);
+        }
+
+        .btn-getkey {
+            background-color: #2a2a35;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: fit-content;
+            margin-top: 8px;
+            text-decoration: none;
+        }
+
+        .btn-getkey:hover {
+            background-color: #3a3a48;
+            transform: none;
+        }
+
+        .btn-getkey svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        .image-modal, .video-modal, .features-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 10, 12, 0.9);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-modal.active, .video-modal.active, .features-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .image-modal img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: var(--radius);
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        .video-container {
+            width: 80%;
+            max-width: 1000px;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .features-modal {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .features-modal .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .features-modal .modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            color: var(--text-main);
+        }
+
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .features-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .features-list::-webkit-scrollbar-thumb {
+            background: #3a3a48;
+            border-radius: 4px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .feature-bullet {
+            width: 6px;
+            height: 6px;
+            background-color: var(--text-main);
+            border-radius: 50%;
+            margin-top: 7px;
+            flex-shrink: 0;
+        }
+
+        /* ── FAQ STYLES ── */
+        .faq-section {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .faq-hero {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .faq-hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            background: linear-gradient(180deg, #ffffff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .faq-hero p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .faq-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(88, 101, 242, 0.4);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            cursor: pointer;
+            gap: 16px;
+        }
+
+        .faq-question span {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+
+        .faq-chevron {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-muted);
+            flex-shrink: 0;
+            transition: transform 0.25s ease;
+        }
+
+        .faq-item.open .faq-chevron {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 24px;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 400px;
+            padding: 0 24px 20px;
+        }
+
+        .faq-answer p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .faq-answer a {
+            color: var(--primary);
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .faq-answer a:hover {
+            color: #8b5cf6;
+            text-decoration: underline;
+        }
+
+        /* bold bullet dot inside answer */
+        .faq-answer .answer-bullet {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--text-main);
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+            flex-shrink: 0;
+        }
+
+        .faq-answer .bullet-line {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .faq-answer .bullet-line .answer-bullet {
+            margin-top: 7px;
+            margin-right: 0;
+        }
+
+        @media (max-width: 768px) {
+            .header-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .search-container {
+                max-width: 100%;
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .stats-overview {
+                grid-template-columns: 1fr;
+            }
+            header {
+                flex-wrap: wrap;
+                gap: 16px;
+                justify-content: center;
+                padding: 20px;
+            }
+            nav {
+                display: flex;
+                width: 100%;
+                justify-content: center;
+                order: 3;
+                margin-top: 10px;
+            }
+            .header-actions {
+                order: 2;
+            }
+            .logo-container {
+                order: 1;
+                width: 100%;
+                justify-content: center;
+            }
+            .faq-hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <div class="logo-text">Terminator1 Hub</div>
+        </div>
+        <nav>
+            <a href="#" class="active" data-category="main" onclick="switchTab('main'); return false;">Main</a>
+            <a href="#faq" data-category="faq" onclick="switchTab('faq'); return false;">FAQ</a>
+            <a href="https://terminator1hub-supported-executors.vercel.app" target="_blank" rel="noopener noreferrer">Supported executors</a>
+            <a href="https://terminator1hub-socials.vercel.app/" target="_blank" rel="noopener noreferrer">Socials</a>
+        </nav>
+        <div class="header-actions">
+            <a href="https://discord.gg/4EN6HxXdbV" target="_blank" class="discord-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4C14.81 4.33 14.6 4.78 14.44 5.14C12.85 4.9 11.27 4.9 9.7 5.14C9.54 4.78 9.32 4.33 9.13 4C7.63 4.26 6.19 4.71 4.86 5.33C2.14 9.39 1.4 13.36 1.77 17.27C3.56 18.6 5.31 19.4 7.03 19.93C7.44 19.36 7.81 18.75 8.13 18.11C7.52 17.88 6.94 17.6 6.39 17.27C6.54 17.16 6.68 17.04 6.82 16.92C10.13 18.45 13.78 18.45 17.05 16.92C17.19 17.04 17.33 17.16 17.48 17.27C16.93 17.6 16.35 17.88 15.74 18.11C16.06 18.75 16.43 19.36 16.84 19.93C18.56 19.4 20.31 18.6 22.1 17.27C22.54 12.75 21.37 8.81 19.27 5.33ZM8.31 14.87C7.27 14.87 6.41 13.92 6.41 12.74C6.41 11.56 7.25 10.61 8.31 10.61C9.38 10.61 10.23 11.57 10.21 12.74C10.21 13.92 9.37 14.87 8.31 14.87ZM15.69 14.87C14.65 14.87 13.79 13.92 13.79 12.74C13.79 11.56 14.63 10.61 15.69 10.61C16.76 10.61 17.61 11.57 17.59 12.74C17.59 13.92 16.76 14.87 15.69 14.87Z"/>
+                </svg>
+                Discord
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <!-- ── MAIN TAB ── -->
+        <section class="category-section active" id="category-main">
+            <h1 class="hero-title">Terminator1 Hub</h1>
+            <p class="hero-subtitle">Scripts Roblox</p>
+
+            <div class="script-area">
+                <button class="action-btn" id="showScriptBtn">
+                    Get Script
+                </button>
+
+                <div class="script-box" id="scriptBox">
+                    <div class="script-code" id="scriptText">loadstring(game:HttpGet("https://raw.githubusercontent.com/Terminator1hub/Terminator1_Hub/refs/heads/main/Terminator1.lua"))()</div>
+                    <button class="copy-btn" id="copyBtn">Copy</button>
+                </div>
+            </div>
+
+            <div class="stats-overview">
+                <div class="stat-box">
+                    <div class="stat-box-value">5</div>
+                    <div class="stat-box-label">Supported games:</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-value">110+</div>
+                    <div class="stat-box-label">Features</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-value">9</div>
+                    <div class="stat-box-label">Supported executors</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-value">PC + Mobile</div>
+                    <div class="stat-box-label">Platforms</div>
+                </div>
+            </div>
+            
+            <p class="support-text">You need help? Join <a href="https://discord.gg/4EN6HxXdbV" target="_blank">support channel</a></p>
+
+            <div class="header-section">
+                <div class="title-area">
+                    <h1 class="hero-title" style="font-size: 2.5rem; background: none; -webkit-text-fill-color: var(--text-main);">Supported games</h1>
+                    <div class="games-count-wrapper">
+                        <svg class="games-count-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm5 3c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                        </svg>
+                        <span class="games-count">4 games</span>
+                    </div>
+                </div>
+                <div class="search-container">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search games">
+                </div>
+            </div>
+
+            <div class="grid" id="gamesGrid">
+                <div class="card game-card" data-title="TSB">
+                    <div class="card-image image-preview-trigger">
+                        <img src="https://tr.rbxcdn.com/180DAY-f8865ce7904972a639d64e1770041f35/256/256/Image/Webp/noFilter" alt="TSB Image">
+                    </div>
+                    <div class="card-content">
+                        <div class="game-title">TSB</div>
+                        <div class="game-playing">90+ features</div>
+                        <div class="status-row">
+                            <div class="status-dot"></div>
+                            Working
+                        </div>
+                        <a href="https://discord.gg/4EN6HxXdbV" target="_blank" class="btn-getkey">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                            </svg>
+                            Get key
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card game-card" data-title="The Lost Front">
+                    <div class="card-image image-preview-trigger">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202611/09/a79tveMLPC0qh5Ud5462/image.jpg" alt="The Lost Front Image">
+                    </div>
+                    <div class="card-content">
+                        <div class="game-title">The Lost Front</div>
+                        <div class="game-playing">20 features</div>
+                        <div class="status-row">
+                            <div class="status-dot"></div>
+                            Working
+                        </div>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;">
+                            <a href="https://discord.gg/4EN6HxXdbV" target="_blank" class="btn-getkey" style="margin-top: 0;">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                                </svg>
+                                Get key
+                            </a>
+                            <button class="btn-getkey showcase-btn" style="margin-top: 0;" onclick="openVideo('https://www.youtube.com/embed/dyyogYx5y4g?autoplay=1')">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                                Showcase
+                            </button>
+                            <button class="btn-getkey features-btn" style="margin-top: 0;" onclick="openFeatures('lostfront')">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/>
+                                </svg>
+                                Features
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card game-card" data-title="Spider">
+                    <div class="card-image image-preview-trigger">
+                        <img src="https://tr.rbxcdn.com/180DAY-fb32d5180233429640a086ec943ad24f/500/280/Image/Jpeg/noFilter" alt="Spider Image">
+                    </div>
+                    <div class="card-content">
+                        <div class="game-title">Spider</div>
+                        <div class="game-playing">9 features</div>
+                        <div class="status-row">
+                            <div class="status-dot"></div>
+                            Working
+                        </div>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;">
+                            <a href="https://discord.gg/4EN6HxXdbV" target="_blank" class="btn-getkey" style="margin-top: 0;">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                                </svg>
+                                Get key
+                            </a>
+                            <button class="btn-getkey features-btn" style="margin-top: 0;" onclick="openFeatures('spider')">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/>
+                                </svg>
+                                Features
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card game-card" data-title="New Game">
+                    <div class="card-image image-preview-trigger">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-qqwUGauH2zIHTOILwWU0GkE9GGNeJJCzJGLTzQV9bw&s=10" alt="New Game Image">
+                    </div>
+                    <div class="card-content">
+                        <div class="game-title">New Game</div>
+                        <div class="game-playing">Unknown features</div>
+                        <div class="status-row">
+                            <div class="status-dot"></div>
+                            Working
+                        </div>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;">
+                            <a href="https://discord.gg/4EN6HxXdbV" target="_blank" class="btn-getkey" style="margin-top: 0;">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                                </svg>
+                                Get key
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── FAQ TAB ── -->
+        <section class="category-section" id="category-faq">
+            <div class="faq-section">
+                <div class="faq-hero">
+                    <h1>FAQ</h1>
+                    <p>Frequently asked questions</p>
+                </div>
+
+                <div class="faq-list">
+
+                    <div class="faq-item" id="faq-1">
+                        <div class="faq-question" onclick="toggleFaq('faq-1')">
+                            <span>Where I can get key?</span>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 10l5 5 5-5z"/>
+                            </svg>
+                        </div>
+                        <div class="faq-answer">
+                            <p>You can get your key here:</p>
+                            <div class="bullet-line">
+                                <span class="answer-bullet"></span>
+                                <span><a href="https://terminator1hub-get-key.vercel.app/" target="_blank">https://terminator1hub-get-key.vercel.app/</a></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" id="faq-2">
+                        <div class="faq-question" onclick="toggleFaq('faq-2')">
+                            <span>Why won't the script execute. I use xeno executor?</span>
+                            <svg class="faq-chevron" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 10l5 5 5-5z"/>
+                            </svg>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Xeno is not supported. You can check all supported executors here:</p>
+                            <div class="bullet-line">
+                                <span class="answer-bullet"></span>
+                                <span><a href="https://terminator1hub-supported-executors.vercel.app/" target="_blank">https://terminator1hub-supported-executors.vercel.app/</a></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="image-modal" id="imageModal">
+        <img src="" id="modalImage" alt="Full Image">
+    </div>
+
+    <div class="features-modal" id="featuresModal">
+        <div class="modal-content">
+            <div class="modal-title" id="featuresModalTitle">Features</div>
+            <div class="features-list" id="featuresList"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('copy', e => {
+            if (!e.target.closest('.script-code')) {
+                e.preventDefault();
+            }
+        });
+
+        // ── TAB SWITCHING ──
+        const navLinks = document.querySelectorAll('nav a[data-category]');
+        const sections = {
+            main: document.getElementById('category-main'),
+            faq:  document.getElementById('category-faq')
+        };
+
+        window.switchTab = function(category) {
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('data-category') === category);
+            });
+            Object.values(sections).forEach(s => s.classList.remove('active'));
+            if (sections[category]) sections[category].classList.add('active');
+            // update hash without scrolling
+            history.replaceState(null, '', category === 'faq' ? '#faq' : '#');
+        };
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const cat = link.getAttribute('data-category');
+                if (cat) switchTab(cat);
+            });
+        });
+
+        // open FAQ tab if URL hash is #faq on load
+        if (window.location.hash === '#faq') switchTab('faq');
+
+        // ── SCRIPT BOX ──
+        const showScriptBtn = document.getElementById('showScriptBtn');
+        const scriptBox     = document.getElementById('scriptBox');
+        const copyBtn       = document.getElementById('copyBtn');
+        const scriptText    = document.getElementById('scriptText');
+        
+        showScriptBtn.addEventListener('click', () => {
+            scriptBox.classList.toggle('visible');
+            showScriptBtn.textContent = scriptBox.classList.contains('visible') ? 'Close' : 'Get Script';
+        });
+
+        copyBtn.addEventListener('click', () => {
+            const text = scriptText.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                copyBtn.textContent = 'Copied';
+                setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+            }).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                copyBtn.textContent = 'Copied';
+                setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+            });
+        });
+
+        // ── SEARCH ──
+        const searchInput = document.getElementById('searchInput');
+        const gameCards   = document.querySelectorAll('#gamesGrid .game-card');
+        const gamesCount  = document.querySelector('.games-count');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            let visible = 0;
+            gameCards.forEach(card => {
+                const match = card.getAttribute('data-title').toLowerCase().includes(term);
+                card.style.display = match ? 'flex' : 'none';
+                if (match) visible++;
+            });
+            gamesCount.textContent = `${visible} games`;
+        });
+
+        // ── IMAGE MODAL ──
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+
+        document.querySelectorAll('.image-preview-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                modalImage.src = trigger.querySelector('img').src;
+                imageModal.classList.add('active');
+            });
+        });
+
+        imageModal.addEventListener('click', () => imageModal.classList.remove('active'));
+
+        // ── FEATURES MODAL ──
+        const featuresModal      = document.getElementById('featuresModal');
+        const featuresList       = document.getElementById('featuresList');
+        const featuresModalTitle = document.getElementById('featuresModalTitle');
+
+        const featureData = {
+            lostfront: [
+                "Anti AFK","Auto Pickup Ammo","Custom FOV","No Fog",
+                "ESP","Team Check","Box","Glow","Skeleton","Tracers",
+                "Nickname","Distance","Health","FPV Drone","Aimbot","Silent Aim"
+            ],
+            spider: [
+                "Anti Spider Web","Anti AFK","Fly","Fly Speed","WalkSpeed",
+                "Noclip","ESP Items","ESP Players","ESP Spiders"
+            ]
+        };
+
+        function openFeatures(game) {
+            featuresModalTitle.textContent = game === 'lostfront' ? 'The Lost Front' : 'Spider';
+            featuresList.innerHTML = '';
+            (featureData[game] || []).forEach(f => {
+                const item = document.createElement('div');
+                item.className = 'feature-item';
+                item.innerHTML = `<div class="feature-bullet"></div><span>${f}</span>`;
+                featuresList.appendChild(item);
+            });
+            featuresModal.classList.add('active');
+        }
+
+        featuresModal.addEventListener('click', (e) => {
+            if (e.target === featuresModal) featuresModal.classList.remove('active');
+        });
+
+        // ── FAQ ACCORDION ──
+        function toggleFaq(id) {
+            const item = document.getElementById(id);
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        }
+
+        // ── VIDEO ──
+        function openVideo(src) {
+            const win = window.open('', 'Showcase', 'width=1000,height=600,menubar=no,toolbar=no,location=no,status=no');
+            if (win) {
+                win.document.write(`
+                    <html><head><title>Showcase</title></head>
+                    <body style="margin:0;background:#000;display:flex;justify-content:center;align-items:center;height:100vh;">
+                        <iframe width="100%" height="100%" src="${src}" frameborder="0" allow="autoplay;encrypted-media" allowfullscreen></iframe>
+                    </body></html>`);
+                win.document.close();
+            } else {
+                alert('Please allow pop-ups to view the showcase.');
+            }
+        }
+
+        // ── ESCAPE KEY ──
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                imageModal.classList.remove('active');
+                featuresModal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
