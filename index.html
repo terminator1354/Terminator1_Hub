@@ -991,7 +991,25 @@
         </div>
     </div>
 
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+
     <script>
+        // Play click.mp3 when an interactive element is pressed.
+        const clickSound = document.getElementById('clickSound');
+
+        document.addEventListener('click', (event) => {
+            const target = event.target.closest(
+                'button, a, .faq-question, .image-preview-trigger, .logo-container'
+            );
+
+            if (!target) return;
+
+            clickSound.currentTime = 0;
+            clickSound.play().catch(() => {
+                // Browsers may block audio until the user interacts with the page.
+            });
+        }, true);
+
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('copy', e => {
             if (!e.target.closest('.script-code')) {
