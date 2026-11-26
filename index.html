@@ -476,7 +476,6 @@ border-radius: 50%;
 margin-top: 7px;
 flex-shrink: 0;
 }
-/* ===== Экран обязательной регистрации ===== */
 .gate {
 position: fixed;
 inset: 0;
@@ -559,7 +558,7 @@ nav { display: flex; width: 100%; justify-content: center; order: 3; margin-top:
 </style>
 </head>
 <body class="locked">
-<!-- Mandatory account gate -->
+
 <div class="gate" id="gate">
 <div class="gate-card">
 <div class="gate-logo">Terminator1 Hub</div>
@@ -569,7 +568,7 @@ nav { display: flex; width: 100%; justify-content: center; order: 3; margin-top:
 <p class="gate-note">Secure authentication powered by Clerk.</p>
 </div>
 </div>
-<!-- Account settings -->
+
 <div class="account-modal" id="accountModal" aria-hidden="true">
 <div class="account-card">
 <button class="account-close" id="closeAccount" type="button" aria-label="Close">×</button>
@@ -592,6 +591,7 @@ nav { display: flex; width: 100%; justify-content: center; order: 3; margin-top:
 <button type="button" class="logout-btn" id="logoutBtn">Log out</button>
 </div>
 </div>
+
 <header>
 <div class="logo-container">
 <a href="index.html" class="logo-text">Terminator1 Hub</a>
@@ -614,6 +614,7 @@ Discord
 </a>
 </div>
 </header>
+
 <main>
 <h1 class="hero-title">Terminator1 Hub</h1>
 <p class="hero-subtitle">Scripts Roblox</p>
@@ -732,6 +733,7 @@ Features
 </div>
 </div>
 </main>
+
 <div class="image-modal" id="imageModal">
 <img src="" id="modalImage" alt="Full Image">
 </div>
@@ -743,7 +745,6 @@ Features
 </div>
 <audio id="clickSound" src="click.mp3" preload="auto"></audio>
 
-<!-- Clerk SDK -->
 <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_Y29tcGxldGUtZ3VwcHktNzY2MC5jbGVyay5hY2NvdW50cy5kZXYk" src="https://complete-guppy-7660.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
 
 <script>
@@ -755,7 +756,6 @@ clickSound.currentTime = 0;
 clickSound.play().catch(() => {});
 }, true);
 
-// === CLERK AUTH LOGIC ===
 const clerk = window.Clerk;
 const gate = document.getElementById('gate');
 const gateMsg = document.getElementById('gateMsg');
@@ -770,229 +770,190 @@ const logoutBtn = document.getElementById('logoutBtn');
 const closeAccountBtn = document.getElementById('closeAccount');
 const avatarFileInput = document.getElementById('avatarFile');
 const accountMsg = document.getElementById('accountMsg');
-
 let currentProfile = null;
 
 function showGateMsg(message, type = 'error') {
-    gateMsg.textContent = message;
-    gateMsg.className = 'gate-msg ' + type;
+gateMsg.textContent = message;
+gateMsg.className = 'gate-msg ' + type;
 }
 
 async function init() {
-    try {
-        await clerk.load();
-        
-        if (clerk.user) {
-            await unlockSite(clerk.user);
-        } else {
-            lockSite();
-        }
-        
-        // Слушаем изменения авторизации в реальном времени
-        clerk.addListener(({ user }) => {
-            if (user) {
-                unlockSite(user);
-            } else {
-                lockSite();
-            }
-        });
-    } catch (err) {
-        console.error('Clerk init error:', err);
-        showGateMsg('Failed to load authentication system.');
-    }
+try {
+await clerk.load();
+if (clerk.user) await unlockSite(clerk.user);
+else lockSite();
+clerk.addListener(({ user }) => {
+if (user) unlockSite(user);
+else lockSite();
+});
+} catch (err) {
+console.error(err);
+showGateMsg('Failed to load authentication system.');
+}
 }
 
 function lockSite() {
-    gate.classList.remove('hidden');
-    document.body.classList.add('locked');
-    accountModal.classList.remove('active');
-    accountBtn.textContent = 'Account';
+gate.classList.remove('hidden');
+document.body.classList.add('locked');
+accountModal.classList.remove('active');
+accountBtn.textContent = 'Account';
 }
 
 async function unlockSite(user) {
-    gate.classList.add('hidden');
-    document.body.classList.remove('locked');
-    
-    const username = user.fullName || user.primaryEmailAddress?.emailAddress?.split('@')[0] || 'User';
-    accountBtn.textContent = username;
-    
-    currentProfile = {
-        id: user.id,
-        username: username,
-        avatar: user.imageUrl || 'https://www.gravatar.com/avatar/?d=mp&s=180'
-    };
-    
-    updateAccountModal();
+gate.classList.add('hidden');
+document.body.classList.remove('locked');
+const username = user.fullName || user.primaryEmailAddress?.emailAddress?.split('@')[0] || 'User';
+accountBtn.textContent = username;
+currentProfile = {
+id: user.id,
+username: username,
+avatar: user.imageUrl || 'https://www.gravatar.com/avatar/?d=mp&s=180'
+};
+updateAccountModal();
 }
 
-// Открытие модального окна входа/регистрации Clerk
 openAuthBtn.addEventListener('click', () => {
-    clerk.openSignIn({
-        routing: 'modal',
-        appearance: {
-            variables: {
-                colorPrimary: '#5865f2',
-                borderRadius: '12px'
-            }
-        }
-    });
+clerk.openSignIn({
+routing: 'modal',
+appearance: { variables: { colorPrimary: '#5865f2', borderRadius: '12px' } }
+});
 });
 
-// Управление окном настроек аккаунта
 accountBtn.addEventListener('click', () => {
-    if (clerk.user) {
-        updateAccountModal();
-        accountModal.classList.add('active');
-    } else {
-        clerk.openSignIn({ routing: 'modal' });
-    }
+if (clerk.user) {
+updateAccountModal();
+accountModal.classList.add('active');
+} else {
+clerk.openSignIn({ routing: 'modal' });
+}
 });
 
 closeAccountBtn.addEventListener('click', () => accountModal.classList.remove('active'));
-accountModal.addEventListener('click', (e) => {
-    if (e.target === accountModal) accountModal.classList.remove('active');
-});
+accountModal.addEventListener('click', (e) => { if (e.target === accountModal) accountModal.classList.remove('active'); });
 
 function updateAccountModal() {
-    if (!currentProfile) return;
-    accountNameInput.value = currentProfile.username;
-    accountIdEl.textContent = currentProfile.id;
-    accountAvatar.src = currentProfile.avatar;
-    accountMsg.className = 'gate-msg';
-    accountMsg.textContent = '';
+if (!currentProfile) return;
+accountNameInput.value = currentProfile.username;
+accountIdEl.textContent = currentProfile.id;
+accountAvatar.src = currentProfile.avatar;
+accountMsg.className = 'gate-msg';
+accountMsg.textContent = '';
 }
 
-// Сохранение имени через Clerk
 saveAccountBtn.addEventListener('click', async () => {
-    const newName = accountNameInput.value.trim();
-    if (newName.length < 3 || newName.length > 24) {
-        accountMsg.textContent = 'Name must be between 3 and 24 characters.';
-        accountMsg.className = 'gate-msg error';
-        return;
-    }
-    
-    try {
-        await clerk.user.update({ firstName: newName, lastName: '' });
-        currentProfile.username = newName;
-        accountBtn.textContent = newName;
-        accountMsg.textContent = 'Profile updated successfully!';
-        accountMsg.className = 'gate-msg success';
-    } catch (err) {
-        accountMsg.textContent = 'Error updating profile: ' + err.message;
-        accountMsg.className = 'gate-msg error';
-    }
+const newName = accountNameInput.value.trim();
+if (newName.length < 3 || newName.length > 24) {
+accountMsg.textContent = 'Name must be between 3 and 24 characters.';
+accountMsg.className = 'gate-msg error';
+return;
+}
+try {
+await clerk.user.update({ firstName: newName, lastName: '' });
+currentProfile.username = newName;
+accountBtn.textContent = newName;
+accountMsg.textContent = 'Profile updated!';
+accountMsg.className = 'gate-msg success';
+} catch (err) {
+accountMsg.textContent = 'Error: ' + err.message;
+accountMsg.className = 'gate-msg error';
+}
 });
 
-// Загрузка аватара через Clerk
 avatarFileInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    try {
-        await clerk.user.setProfileImage({ file });
-        await clerk.user.reload();
-        currentProfile.avatar = clerk.user.imageUrl;
-        accountAvatar.src = currentProfile.avatar;
-        accountMsg.textContent = 'Avatar updated!';
-        accountMsg.className = 'gate-msg success';
-    } catch (err) {
-        accountMsg.textContent = 'Error uploading avatar: ' + err.message;
-        accountMsg.className = 'gate-msg error';
-    }
+const file = e.target.files[0];
+if (!file) return;
+try {
+await clerk.user.setProfileImage({ file });
+await clerk.user.reload();
+currentProfile.avatar = clerk.user.imageUrl;
+accountAvatar.src = currentProfile.avatar;
+accountMsg.textContent = 'Avatar updated!';
+accountMsg.className = 'gate-msg success';
+} catch (err) {
+accountMsg.textContent = 'Error: ' + err.message;
+accountMsg.className = 'gate-msg error';
+}
 });
 
-// Выход
 logoutBtn.addEventListener('click', async () => {
-    await clerk.signOut();
-    lockSite();
+await clerk.signOut();
+lockSite();
 });
 
-// Копирование ID
 document.getElementById('copyAccountId').addEventListener('click', async () => {
-    await navigator.clipboard.writeText(accountIdEl.textContent);
-    const btn = document.getElementById('copyAccountId');
-    btn.textContent = 'Copied';
-    setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+await navigator.clipboard.writeText(accountIdEl.textContent);
+const btn = document.getElementById('copyAccountId');
+btn.textContent = 'Copied';
+setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
 });
 
-// Инициализация при загрузке
 init();
 
-// === ОСТАЛЬНОЙ КОД САЙТА (БЕЗ ИЗМЕНЕНИЙ) ===
 const showScriptBtn = document.getElementById('showScriptBtn');
 const scriptBox = document.getElementById('scriptBox');
 const copyBtn = document.getElementById('copyBtn');
 const scriptText = document.getElementById('scriptText');
-
 showScriptBtn.addEventListener('click', () => {
-    scriptBox.classList.toggle('visible');
-    showScriptBtn.textContent = scriptBox.classList.contains('visible') ? 'Close' : 'Get Script';
+scriptBox.classList.toggle('visible');
+showScriptBtn.textContent = scriptBox.classList.contains('visible') ? 'Close' : 'Get Script';
 });
-
 copyBtn.addEventListener('click', () => {
-    navigator.clipboard.writeText(scriptText.textContent).then(() => {
-        copyBtn.textContent = 'Copied';
-        setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
-    });
+navigator.clipboard.writeText(scriptText.textContent).then(() => {
+copyBtn.textContent = 'Copied';
+setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+});
 });
 
 const searchInput = document.getElementById('searchInput');
 const gameCards = document.querySelectorAll('#gamesGrid .game-card');
 const gamesCount = document.querySelector('.games-count');
-
 searchInput.addEventListener('input', (e) => {
-    const term = e.target.value.toLowerCase();
-    let visible = 0;
-    gameCards.forEach(card => {
-        const match = card.getAttribute('data-title').toLowerCase().includes(term);
-        card.style.display = match ? 'flex' : 'none';
-        if (match) visible++;
-    });
-    gamesCount.textContent = `${visible} games`;
+const term = e.target.value.toLowerCase();
+let visible = 0;
+gameCards.forEach(card => {
+const match = card.getAttribute('data-title').toLowerCase().includes(term);
+card.style.display = match ? 'flex' : 'none';
+if (match) visible++;
+});
+gamesCount.textContent = `${visible} games`;
 });
 
 const imageModal = document.getElementById('imageModal');
 const modalImage = document.getElementById('modalImage');
-
 document.querySelectorAll('.image-preview-trigger').forEach(trigger => {
-    trigger.addEventListener('click', () => {
-        modalImage.src = trigger.querySelector('img').src;
-        imageModal.classList.add('active');
-    });
+trigger.addEventListener('click', () => {
+modalImage.src = trigger.querySelector('img').src;
+imageModal.classList.add('active');
 });
-
+});
 imageModal.addEventListener('click', () => imageModal.classList.remove('active'));
 
 const featuresModal = document.getElementById('featuresModal');
 const featuresList = document.getElementById('featuresList');
 const featuresTitle = document.getElementById('featuresModalTitle');
-
 const featureData = {
-    lostfront: ["Anti AFK", "Auto Pickup Ammo", "Custom FOV", "No Fog", "ESP", "Team Check", "Box", "Glow", "Skeleton", "Tracers", "Nickname", "Distance", "Health", "FPV Drone", "Aimbot", "Silent Aim"],
-    spider: ["Anti Spider Web", "Anti AFK", "Fly", "Fly Speed", "WalkSpeed", "Noclip", "ESP Items", "ESP Players", "ESP Spiders"]
+lostfront: ["Anti AFK", "Auto Pickup Ammo", "Custom FOV", "No Fog", "ESP", "Team Check", "Box", "Glow", "Skeleton", "Tracers", "Nickname", "Distance", "Health", "FPV Drone", "Aimbot", "Silent Aim"],
+spider: ["Anti Spider Web", "Anti AFK", "Fly", "Fly Speed", "WalkSpeed", "Noclip", "ESP Items", "ESP Players", "ESP Spiders"]
 };
-
 window.openFeatures = function(game) {
-    featuresTitle.textContent = game === 'lostfront' ? 'The Lost Front' : 'Spider';
-    featuresList.innerHTML = '';
-    (featureData[game] || []).forEach(f => {
-        const item = document.createElement('div');
-        item.className = 'feature-item';
-        item.innerHTML = `<div class="feature-bullet"></div><span>${f}</span>`;
-        featuresList.appendChild(item);
-    });
-    featuresModal.classList.add('active');
-};
-
-featuresModal.addEventListener('click', (e) => {
-    if (e.target === featuresModal) featuresModal.classList.remove('active');
+featuresTitle.textContent = game === 'lostfront' ? 'The Lost Front' : 'Spider';
+featuresList.innerHTML = '';
+(featureData[game] || []).forEach(f => {
+const item = document.createElement('div');
+item.className = 'feature-item';
+item.innerHTML = `<div class="feature-bullet"></div><span>${f}</span>`;
+featuresList.appendChild(item);
 });
-
+featuresModal.classList.add('active');
+};
+featuresModal.addEventListener('click', (e) => {
+if (e.target === featuresModal) featuresModal.classList.remove('active');
+});
 window.openVideo = function(src) {
-    const win = window.open('', 'Showcase', 'width=1000,height=600');
-    if (win) {
-        win.document.write(`<html><body style="margin:0;background:#000;display:flex;justify-content:center;align-items:center;height:100vh;"><iframe width="100%" height="100%" src="${src}" frameborder="0" allowfullscreen></iframe></body></html>`);
-    }
+const win = window.open('', 'Showcase', 'width=1000,height=600');
+if (win) {
+win.document.write(`<html><body style="margin:0;background:#000;display:flex;justify-content:center;align-items:center;height:100vh;"><iframe width="100%" height="100%" src="${src}" frameborder="0" allowfullscreen></iframe></body></html>`);
+}
 };
 </script>
 </body>
