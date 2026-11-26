@@ -462,7 +462,7 @@
             flex-shrink: 0;
         }
 
-        .image-modal, .features-modal {
+        .image-modal, .features-modal, .profile-modal {
             display: none;
             position: fixed;
             z-index: 1000;
@@ -478,7 +478,7 @@
             transition: opacity 0.3s ease;
         }
 
-        .image-modal.active, .features-modal.active {
+        .image-modal.active, .features-modal.active, .profile-modal.active {
             display: flex;
             opacity: 1;
         }
@@ -491,7 +491,8 @@
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
 
-        .features-modal .modal-content {
+        .features-modal .modal-content,
+        .profile-modal .modal-content {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: var(--radius);
@@ -502,7 +503,8 @@
             position: relative;
         }
 
-        .features-modal .modal-title {
+        .features-modal .modal-title,
+        .profile-modal .modal-title {
             font-size: 1.5rem;
             font-weight: 800;
             margin-bottom: 24px;
@@ -669,6 +671,68 @@
             border: 1px solid rgba(76, 175, 80, 0.35);
             color: var(--success);
         }
+
+        /* Profile modal specifics */
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .profile-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: #0a0a0c;
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+        }
+
+        .profile-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .profile-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+            user-select: text;
+            -webkit-user-select: text;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+        }
+
+        .profile-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .profile-btn.login {
+            background: linear-gradient(135deg, var(--success), #388e3c);
+            color: #fff;
+        }
+
+        .profile-btn.logout {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: var(--danger);
+        }
+
+        .profile-btn:hover { opacity: 0.9; }
 
         @media (max-width: 768px) {
             .header-section { flex-direction: column; align-items: flex-start; }
@@ -875,6 +939,31 @@
         </div>
     </div>
 
+    <!-- Profile Modal -->
+    <div class="profile-modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-title">Account Profile</div>
+            <div class="profile-info" id="profileInfo">
+                <div class="profile-row">
+                    <span class="profile-label">Name</span>
+                    <span class="profile-value" id="profileName">—</span>
+                </div>
+                <div class="profile-row">
+                    <span class="profile-label">ID</span>
+                    <span class="profile-value" id="profileId">—</span>
+                </div>
+                <div class="profile-row">
+                    <span class="profile-label">Email</span>
+                    <span class="profile-value" id="profileEmail">—</span>
+                </div>
+            </div>
+            <div class="profile-actions">
+                <button class="profile-btn login" id="profileLoginBtn">Log in</button>
+                <button class="profile-btn logout" id="profileLogoutBtn">Log out</button>
+            </div>
+        </div>
+    </div>
+
     <audio id="clickSound" src="click.mp3" preload="auto"></audio>
 
     <script>
@@ -899,6 +988,9 @@
         function setSession(session) {
             localStorage.setItem(SESSION_KEY, JSON.stringify(session));
         }
+        function removeSession() {
+            localStorage.removeItem(SESSION_KEY);
+        }
         function hashPassword(pw) {
             let hash = 0;
             for (let i = 0; i < pw.length; i++) {
@@ -920,6 +1012,14 @@
         const registerBtn  = document.getElementById('registerBtn');
         const accountBtn   = document.getElementById('accountBtn');
 
+        // Profile modal elements
+        const profileModal      = document.getElementById('profileModal');
+        const profileName       = document.getElementById('profileName');
+        const profileId         = document.getElementById('profileId');
+        const profileEmail      = document.getElementById('profileEmail');
+        const profileLoginBtn   = document.getElementById('profileLoginBtn');
+        const profileLogoutBtn  = document.getElementById('profileLogoutBtn');
+
         function showGateMsg(text, type = 'error') {
             gateMsg.textContent = text;
             gateMsg.className = 'gate-msg ' + type;
@@ -939,6 +1039,73 @@
             document.body.classList.remove('locked');
             refreshAccountBtn();
         }
+
+        function openProfileModal() {
+            const session = getSession();
+            if (session) {
+                profileName.textContent = session.name || '—';
+                profileEmail.textContent = session.email || '—';
+                // Generate a stable ID from email hash if no id stored
+                let id = session.id;
+                if (!id && session.email) {
+                    let hash = 0;
+                    for (let i = 0; i < session.email.length; i++) {
+                        hash = ((hash << 5) - hash) + session.email.charCodeAt(i);
+                        hash |= 0;
+                    }
+                    id = 'user_' + Math.abs(hash).toString(36);
+                }
+                profileId.textContent = id || '—';
+                // Logged in view
+                profileLoginBtn.style.display = 'none';
+                profileLogoutBtn.style.display = 'block';
+            } else {
+                // Logged out view
+                profileName.textContent = '—';
+                profileId.textContent = '—';
+                profileEmail.textContent = '—';
+                profileLoginBtn.style.display = 'block';
+                profileLogoutBtn.style.display = 'none';
+            }
+            profileModal.classList.add('active');
+        }
+
+        function closeProfileModal() {
+            profileModal.classList.remove('active');
+        }
+
+        // Account button click
+        accountBtn.addEventListener('click', openProfileModal);
+
+        // Login button (simulates re-login by showing gate)
+        profileLoginBtn.addEventListener('click', () => {
+            closeProfileModal();
+            // If session exists, just unlock; otherwise show gate
+            const session = getSession();
+            if (session && session.name) {
+                unlockSite();
+            } else {
+                gate.classList.remove('hidden');
+                document.body.classList.add('locked');
+                hideGateMsg();
+            }
+        });
+
+        // Logout button
+        profileLogoutBtn.addEventListener('click', () => {
+            removeSession();
+            closeProfileModal();
+            // Show gate again
+            gate.classList.remove('hidden');
+            document.body.classList.add('locked');
+            hideGateMsg();
+            refreshAccountBtn();
+        });
+
+        // Close profile modal on background click
+        profileModal.addEventListener('click', (e) => {
+            if (e.target === profileModal) closeProfileModal();
+        });
 
         sendCodeBtn.addEventListener('click', async () => {
             hideGateMsg();
@@ -1039,7 +1206,15 @@
                     return;
                 }
 
-                setSession({ name, email });
+                // Generate a stable id from email
+                let hash = 0;
+                for (let i = 0; i < email.length; i++) {
+                    hash = ((hash << 5) - hash) + email.charCodeAt(i);
+                    hash |= 0;
+                }
+                const userId = 'user_' + Math.abs(hash).toString(36);
+
+                setSession({ name, email, id: userId });
                 unlockSite();
             } catch {
                 showGateMsg('Network error during registration');
