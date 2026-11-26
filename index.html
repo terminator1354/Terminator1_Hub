@@ -134,6 +134,31 @@
             border: none;
         }
 
+        .gear-btn {
+            background: #2a2a35;
+            color: #fff;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+
+        .gear-btn:hover {
+            background: #3a3a48;
+        }
+
+        .gear-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
         main {
             flex: 1;
             display: flex;
@@ -600,6 +625,7 @@
         .email-row {
             display: flex;
             gap: 8px;
+            align-items: stretch;
         }
 
         .gate-input {
@@ -645,9 +671,10 @@
         .code-btn {
             width: auto;
             margin-top: 0;
-            padding: 0 14px;
+            padding: 0 12px;
             white-space: nowrap;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
+            min-width: 90px;
         }
 
         .gate-msg {
@@ -670,6 +697,30 @@
             background: rgba(76, 175, 80, 0.12);
             border: 1px solid rgba(76, 175, 80, 0.35);
             color: var(--success);
+        }
+
+        .gate-footer-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .gate-footer-link a {
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .gate-footer-link a:hover {
+            text-decoration: underline;
+        }
+
+        .captcha-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 8px;
+            min-height: 78px;
         }
 
         /* Profile modal specifics */
@@ -766,15 +817,24 @@
                     </div>
                 </div>
                 <div class="gate-field">
-                    <label for="gateCode">Email Code</label>
-                    <input type="text" id="gateCode" class="gate-input" placeholder="6-digit code" inputmode="numeric" required>
+                    <label for="gateCode">Code</label>
+                    <input type="text" id="gateCode" class="gate-input" placeholder="code" inputmode="numeric" required>
                 </div>
                 <div class="gate-field">
                     <label for="gatePassword">Password</label>
                     <input type="password" id="gatePassword" class="gate-input" placeholder="enter your password" autocomplete="new-password" required>
                 </div>
+                <div class="gate-field">
+                    <label>Captcha</label>
+                    <div class="captcha-container" id="captchaContainer">
+                        <!-- reCAPTCHA widget will be rendered here -->
+                    </div>
+                </div>
                 <button type="submit" class="gate-btn" id="registerBtn">Register</button>
             </form>
+            <div class="gate-footer-link">
+                Already have an account? <a id="showLoginLink">Log in</a>
+            </div>
         </div>
     </div>
 
@@ -791,7 +851,11 @@
             <a href="contacts.html">Socials</a>
         </nav>
         <div class="header-actions">
-            <button class="discord-btn" id="accountBtn">Account</button>
+            <button class="gear-btn" id="accountBtn" title="Account">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                </svg>
+            </button>
             <a href="https://discord.gg/4EN6HxXdbV" target="_blank" class="discord-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4C14.81 4.33 14.6 4.78 14.44 5.14C12.85 4.9 11.27 4.9 9.7 5.14C9.54 4.78 9.32 4.33 9.13 4C7.63 4.26 6.19 4.71 4.86 5.33C2.14 9.39 1.4 13.36 1.77 17.27C3.56 18.6 5.31 19.4 7.03 19.93C7.44 19.36 7.81 18.75 8.13 18.11C7.52 17.88 6.94 17.6 6.39 17.27C6.54 17.16 6.68 17.04 6.82 16.92C10.13 18.45 13.78 18.45 17.05 16.92C17.19 17.04 17.33 17.16 17.48 17.27C16.93 17.6 16.35 17.88 15.74 18.11C16.06 18.75 16.43 19.36 16.84 19.93C18.56 19.4 20.31 18.6 22.1 17.27C22.54 12.75 21.37 8.81 19.27 5.33ZM8.31 14.87C7.27 14.87 6.41 13.92 6.41 12.74C6.41 11.56 7.25 10.61 8.31 10.61C9.38 10.61 10.23 11.57 10.21 12.74C10.21 13.92 9.37 14.87 8.31 14.87ZM15.69 14.87C14.65 14.87 13.79 13.92 13.79 12.74C13.79 11.56 14.63 10.61 15.69 10.61C16.76 10.61 17.61 11.57 17.59 12.74C17.59 13.92 16.76 14.87 15.69 14.87Z"/>
@@ -966,6 +1030,9 @@
 
     <audio id="clickSound" src="click.mp3" preload="auto"></audio>
 
+    <!-- reCAPTCHA v2 -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     <script>
         const clickSound = document.getElementById('clickSound');
         document.addEventListener('click', (event) => {
@@ -977,9 +1044,13 @@
 
         const WORKER_URL = 'https://restless-band-a26d.alexavdiienko1234.workers.dev';
         const SESSION_KEY = 'terminator1_session';
+        const RECAPTCHA_SITE_KEY = '6LeqBDQuAAAAADXVH7_BzgLcyf6kBmWZh0Hjxf9v';
 
         let verificationToken = '';
         let verificationExpires = 0;
+        let recaptchaWidgetId = null;
+        let recaptchaReady = false;
+        let sendCodeCooldown = false;
 
         function getSession() {
             try { return JSON.parse(localStorage.getItem(SESSION_KEY)); }
@@ -1000,6 +1071,15 @@
             }
             return 'h' + Math.abs(hash).toString(36);
         }
+        // Numeric ID generation from email (deterministic)
+        function generateNumericId(email) {
+            let hash = 0;
+            for (let i = 0; i < email.length; i++) {
+                hash = ((hash << 5) - hash) + email.charCodeAt(i);
+                hash |= 0;
+            }
+            return String(Math.abs(hash));
+        }
 
         const gate         = document.getElementById('gate');
         const gateForm     = document.getElementById('gateForm');
@@ -1011,6 +1091,7 @@
         const sendCodeBtn  = document.getElementById('sendCodeBtn');
         const registerBtn  = document.getElementById('registerBtn');
         const accountBtn   = document.getElementById('accountBtn');
+        const showLoginLink = document.getElementById('showLoginLink');
 
         // Profile modal elements
         const profileModal      = document.getElementById('profileModal');
@@ -1031,7 +1112,7 @@
 
         function refreshAccountBtn() {
             const session = getSession();
-            accountBtn.textContent = (session && session.name) ? session.name : 'Account';
+            accountBtn.title = (session && session.name) ? session.name : 'Account';
         }
 
         function unlockSite() {
@@ -1040,27 +1121,21 @@
             refreshAccountBtn();
         }
 
+        function showGate() {
+            gate.classList.remove('hidden');
+            document.body.classList.add('locked');
+            hideGateMsg();
+        }
+
         function openProfileModal() {
             const session = getSession();
             if (session) {
                 profileName.textContent = session.name || '—';
                 profileEmail.textContent = session.email || '—';
-                // Generate a stable ID from email hash if no id stored
-                let id = session.id;
-                if (!id && session.email) {
-                    let hash = 0;
-                    for (let i = 0; i < session.email.length; i++) {
-                        hash = ((hash << 5) - hash) + session.email.charCodeAt(i);
-                        hash |= 0;
-                    }
-                    id = 'user_' + Math.abs(hash).toString(36);
-                }
-                profileId.textContent = id || '—';
-                // Logged in view
+                profileId.textContent = session.id || '—';
                 profileLoginBtn.style.display = 'none';
                 profileLogoutBtn.style.display = 'block';
             } else {
-                // Logged out view
                 profileName.textContent = '—';
                 profileId.textContent = '—';
                 profileEmail.textContent = '—';
@@ -1074,40 +1149,70 @@
             profileModal.classList.remove('active');
         }
 
-        // Account button click
+        // reCAPTCHA setup
+        window.onRecaptchaLoad = function() {
+            if (typeof grecaptcha !== 'undefined' && document.getElementById('captchaContainer')) {
+                recaptchaWidgetId = grecaptcha.render('captchaContainer', {
+                    'sitekey': RECAPTCHA_SITE_KEY,
+                    'theme': 'dark'
+                });
+                recaptchaReady = true;
+            }
+        };
+
+        // Poll for grecaptcha
+        (function waitForRecaptcha() {
+            if (typeof grecaptcha !== 'undefined' && grecaptcha.render) {
+                window.onRecaptchaLoad();
+            } else {
+                setTimeout(waitForRecaptcha, 100);
+            }
+        })();
+
+        function getRecaptchaResponse() {
+            if (typeof grecaptcha !== 'undefined' && recaptchaWidgetId !== null) {
+                return grecaptcha.getResponse(recaptchaWidgetId);
+            }
+            return '';
+        }
+
+        function resetRecaptcha() {
+            if (typeof grecaptcha !== 'undefined' && recaptchaWidgetId !== null) {
+                grecaptcha.reset(recaptchaWidgetId);
+            }
+        }
+
         accountBtn.addEventListener('click', openProfileModal);
 
-        // Login button (simulates re-login by showing gate)
         profileLoginBtn.addEventListener('click', () => {
             closeProfileModal();
-            // If session exists, just unlock; otherwise show gate
             const session = getSession();
             if (session && session.name) {
                 unlockSite();
             } else {
-                gate.classList.remove('hidden');
-                document.body.classList.add('locked');
-                hideGateMsg();
+                showGate();
             }
         });
 
-        // Logout button
         profileLogoutBtn.addEventListener('click', () => {
             removeSession();
             closeProfileModal();
-            // Show gate again
-            gate.classList.remove('hidden');
-            document.body.classList.add('locked');
-            hideGateMsg();
+            showGate();
             refreshAccountBtn();
         });
 
-        // Close profile modal on background click
         profileModal.addEventListener('click', (e) => {
             if (e.target === profileModal) closeProfileModal();
         });
 
+        showLoginLink.addEventListener('click', () => {
+            // For now just show gate with a message
+            showGate();
+            showGateMsg('Log in with your registered credentials', 'success');
+        });
+
         sendCodeBtn.addEventListener('click', async () => {
+            if (sendCodeCooldown) return;
             hideGateMsg();
             const email = gateEmail.value.trim();
 
@@ -1120,6 +1225,14 @@
                 return;
             }
 
+            // Check reCAPTCHA before sending code
+            const recaptchaResponse = getRecaptchaResponse();
+            if (!recaptchaResponse) {
+                showGateMsg('Please complete the captcha');
+                return;
+            }
+
+            sendCodeCooldown = true;
             sendCodeBtn.disabled = true;
             sendCodeBtn.textContent = 'Sending...';
 
@@ -1127,27 +1240,36 @@
                 const res = await fetch(WORKER_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'send_code', email })
+                    body: JSON.stringify({
+                        action: 'send_code',
+                        email,
+                        recaptcha: recaptchaResponse
+                    })
                 });
                 const data = await res.json().catch(() => ({}));
                 if (!res.ok || !data.ok) {
                     showGateMsg(data.error || 'Failed to send code');
                     sendCodeBtn.disabled = false;
                     sendCodeBtn.textContent = 'Send Code';
+                    sendCodeCooldown = false;
+                    resetRecaptcha();
                     return;
                 }
 
                 verificationToken = data.token;
                 verificationExpires = data.expires;
                 showGateMsg('Verification code sent to ' + email, 'success');
+                resetRecaptcha();
 
                 let left = 30;
+                sendCodeBtn.textContent = `${left}s`;
                 const timer = setInterval(() => {
                     left--;
                     if (left <= 0) {
                         clearInterval(timer);
                         sendCodeBtn.disabled = false;
                         sendCodeBtn.textContent = 'Send Code';
+                        sendCodeCooldown = false;
                     } else {
                         sendCodeBtn.textContent = `${left}s`;
                     }
@@ -1156,6 +1278,8 @@
                 showGateMsg('Network error while sending code');
                 sendCodeBtn.disabled = false;
                 sendCodeBtn.textContent = 'Send Code';
+                sendCodeCooldown = false;
+                resetRecaptcha();
             }
         });
 
@@ -1181,6 +1305,13 @@
                 return;
             }
 
+            // Check reCAPTCHA for registration too
+            const recaptchaResponse = getRecaptchaResponse();
+            if (!recaptchaResponse) {
+                showGateMsg('Please complete the captcha');
+                return;
+            }
+
             registerBtn.disabled = true;
             registerBtn.textContent = 'Registering...';
 
@@ -1195,7 +1326,8 @@
                         code,
                         passwordHash: hashPassword(password),
                         token: verificationToken,
-                        expires: verificationExpires
+                        expires: verificationExpires,
+                        recaptcha: recaptchaResponse
                     })
                 });
                 const data = await res.json().catch(() => ({}));
@@ -1203,23 +1335,18 @@
                     showGateMsg(data.error || 'Registration failed');
                     registerBtn.disabled = false;
                     registerBtn.textContent = 'Register';
+                    resetRecaptcha();
                     return;
                 }
 
-                // Generate a stable id from email
-                let hash = 0;
-                for (let i = 0; i < email.length; i++) {
-                    hash = ((hash << 5) - hash) + email.charCodeAt(i);
-                    hash |= 0;
-                }
-                const userId = 'user_' + Math.abs(hash).toString(36);
-
-                setSession({ name, email, id: userId });
+                const numericId = generateNumericId(email);
+                setSession({ name, email, id: numericId });
                 unlockSite();
             } catch {
                 showGateMsg('Network error during registration');
                 registerBtn.disabled = false;
                 registerBtn.textContent = 'Register';
+                resetRecaptcha();
             }
         });
 
@@ -1228,8 +1355,7 @@
             if (session && session.name) {
                 unlockSite();
             } else {
-                gate.classList.remove('hidden');
-                document.body.classList.add('locked');
+                showGate();
             }
         })();
 
