@@ -64,7 +64,7 @@
     "password": "hbt13ew",
     "createdAt": 1795850000045
   },
-  "Ã°ÂÂÂÃ°ÂÂÂÃ°ÂÂÂÃ°ÂÂÂ": {
+  "ÃÂ°ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂ": {
     "email": "aishafatima7662@gmail.com",
     "password": "hjqpjd1",
     "createdAt": 1795864649066
@@ -78,5 +78,10 @@
     "email": "andreflima5002@gmail.com",
     "password": "hvdvph4",
     "createdAt": 1795872772533
+  },
+  "bryan": {
+    "email": "bryanamolong1@gmail.com",
+    "password": "hlxif9l",
+    "createdAt": 1795873375177
   }
 }
